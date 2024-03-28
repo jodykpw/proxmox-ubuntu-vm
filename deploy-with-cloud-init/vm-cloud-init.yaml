@@ -1,0 +1,31 @@
+#cloud-config
+hostname: vm.domain.com
+manage_etc_hosts: true
+fqdn: vm.domain.com
+timezone: Europe/London
+chpasswd:
+  ## Forcing user to change the default password at first login
+  expire: true
+  users:
+    - name: ubuntu
+      password: password
+      type: text
+users:
+  - name: ubuntu
+    groups: "adm, cdrom, dip, plugdev, lxd, sudo"
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa xxxxx
+      - ssh-ed25519 xxxxx
+package_upgrade: true
+packages:
+  - qemu-guest-agent
+runcmd:
+  - systemctl enable qemu-guest-agent
+  - systemctl start qemu-guest-agent
+power_state:
+    delay: now
+    mode: reboot
+    message: Rebooting after cloud-init completion
+    condition: true
