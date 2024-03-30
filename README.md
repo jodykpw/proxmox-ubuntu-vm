@@ -2,6 +2,10 @@
 
 This repository contains an automation script and templates for deploying Ubuntu Server on Proxmox using Cloud-Init.
 
+## Design goals
+
+The objective is to utilise the provided automation script for deploying Ubuntu Server on Proxmox using Cloud-Init. This approach is necessary due to the absence of GitLab CI/CD with Terraform setup to create Proxmox virtual machines. By leveraging the automation script, we aim to streamline the deployment process and ensure consistent provisioning of Ubuntu Server instances on the Proxmox infrastructure.
+
 ## 🚀 Deployment Steps
 
 1. First login to your Proxmox VE host terminal:

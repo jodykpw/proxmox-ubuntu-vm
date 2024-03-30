@@ -10,6 +10,18 @@ chpasswd:
     - name: ubuntu
       password: password
       type: text
+write_files:
+  - path: /tmp/home_disk_setup.sh
+    content: |
+      #!/bin/bash
+      BLOCK_DEVICE=/dev/sdb
+      echo -e "n\np\n\n\n\nw" | sudo fdisk $BLOCK_DEVICE
+      mkfs.xfs $(echo $BLOCK_DEVICE)1
+      mkdir /mnt/new_home/
+      mount $(echo $BLOCK_DEVICE)1 /mnt/new_home/
+      rsync -avh /home/ /mnt/new_home/
+      UUID=$(blkid $(echo $BLOCK_DEVICE)1 | awk '{print $2}' | sed 's/"//g')
+      echo "$UUID /mnt/new_home xfs defaults 0 0" | sudo tee -a /etc/fstab
 users:
   - name: ubuntu
     groups: "adm, cdrom, dip, plugdev, lxd, sudo"
@@ -21,9 +33,14 @@ users:
 package_upgrade: true
 packages:
   - qemu-guest-agent
+  - git
+  - ansible
 runcmd:
   - systemctl enable qemu-guest-agent
   - systemctl start qemu-guest-agent
+  - chmod +x /tmp/home_disk_setup.sh
+  - /tmp/home_disk_setup.sh
+  - rm -r /tmp/*
 power_state:
     delay: now
     mode: reboot
