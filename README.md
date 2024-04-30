@@ -51,6 +51,3 @@ MIT / BSD
 * Author: Jody WAN
 * Linkedin: https://www.linkedin.com/in/jodywan/
 * Website: https://www.jodywan.com
-
-😊 Enjoy automating your CentOS Stream 8 deployments with Cloud-Init on Proxmox!
-
